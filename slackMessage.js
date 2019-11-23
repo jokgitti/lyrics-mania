@@ -4,9 +4,6 @@ const getSlackMessage = ({ lyrics, artist, title, album, link }) => ({
   response_type: 'in_channel',
   blocks: [
     {
-      type: 'divider',
-    },
-    {
       type: 'section',
       text: {
         type: 'mrkdwn',

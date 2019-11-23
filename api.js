@@ -1,6 +1,6 @@
 const axios = require('axios');
 
-const API_KEY = 'd88b3d451f30f783ec837f2098553c9a';
+const API_KEY = process.env.API_KEY;
 const API_BASE_URI = 'https://api.musixmatch.com/ws/1.1';
 
 const baseParams = {
@@ -17,7 +17,7 @@ const trackSearch = ({ artist }) =>
       q_artist: artist,
       f_has_lyrics: 1,
       s_track_rating: 'desc',
-      page_size: 100,
+      page_size: 50,
     },
   });
 
