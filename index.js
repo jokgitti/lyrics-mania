@@ -10,7 +10,7 @@ const port = process.env.PORT || 3000;
 app.use(bodyParser.json()); // support json encoded bodies
 app.use(bodyParser.urlencoded({ extended: true }));
 
-app.post('/artist/', async (req, res) => {
+app.post('/artist', async (req, res) => {
   try {
     const { text: artist, response_url } = req.body;
     if (!artist) {
