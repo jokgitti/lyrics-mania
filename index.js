@@ -1,12 +1,16 @@
 const express = require('express');
+const bodyParser = require('body-parser');
 const api = require('./api');
 
 const app = express();
 const port = process.env.PORT || 3000;
 
-app.get('/random_lyrics/:artist', async (req, res) => {
+app.use(bodyParser.json()); // support json encoded bodies
+app.use(bodyParser.urlencoded({ extended: true }));
+
+app.post('/random_lyrics/', async (req, res) => {
   try {
-    const { artist } = req.params;
+    const { text: artist } = req.body;
     if (!artist) {
       res.send(400);
       return;
