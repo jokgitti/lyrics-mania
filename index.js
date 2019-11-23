@@ -2,7 +2,7 @@ const express = require('express');
 const api = require('./api');
 
 const app = express();
-const port = process.env.NODE_ENV === 'production' ? 80 : 3000;
+const port = process.env.PORT || 3000;
 
 app.get('/random_lyrics/:artist', async (req, res) => {
   try {
