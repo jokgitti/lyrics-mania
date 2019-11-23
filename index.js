@@ -38,10 +38,9 @@ app.post('/random_lyrics/', async (req, res) => {
       artist: track.artist_name,
       album: track.album_name,
       link: track.track_share_url,
-      lyrics: textLyrics.replace(
-        '******* This Lyrics is NOT for Commercial use *******',
-        '',
-      ).replace('\n','\n>'),
+      lyrics: textLyrics
+        .replace('******* This Lyrics is NOT for Commercial use *******', '')
+        .replace('\n', '\n>'),
     };
 
     if (process.env.NODE_ENV === 'production') {
@@ -50,11 +49,11 @@ app.post('/random_lyrics/', async (req, res) => {
       return;
     }
 
+    res.status(200);
     res.send(info);
-    res.send(200);
   } catch (e) {
     console.log(e);
-    res.status(500);
+    res.send(500);
   }
 });
 

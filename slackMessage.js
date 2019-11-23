@@ -10,8 +10,17 @@ const getSlackMessage = ({ lyrics, artist, title, album, link }) => ({
       type: 'section',
       text: {
         type: 'mrkdwn',
-        text: `🎤 *<${link}|${title}>*\n*${artist}*, ${album}\n\n${lyrics}`,
+        text: `🎤 *<${link}|${title}>*\n*${artist}*, ${album}`,
       },
+    },
+    {
+      type: 'context',
+      elements: [
+        {
+          type: 'mrkdwn',
+          text: `${lyrics}`,
+        },
+      ],
     },
     {
       type: 'divider',
