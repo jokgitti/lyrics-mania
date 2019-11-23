@@ -23,6 +23,7 @@ const trackSearch = ({ artist }) =>
 
 const lyricsGet = ({ trackId }) =>
   client.get('track.lyrics.get', { params: { ...baseParams, track_id: trackId } });
+
 module.exports = {
   trackSearch,
   lyricsGet,

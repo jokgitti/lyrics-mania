@@ -1,6 +1,8 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const api = require('./api');
+const slackMessage = require('./slackMessage');
+const tracks = require('./tracks');
+const lyrics = require('./lyrics');
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -10,33 +12,40 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 app.post('/random_lyrics/', async (req, res) => {
   try {
-    const { text: artist } = req.body;
+    const { text: artist, response_url } = req.body;
     if (!artist) {
       res.send(400);
       return;
     }
 
-    const tracksResponse = await api.trackSearch({ artist });
-
-    const tracks = tracksResponse.data.message.body.track_list.map(track => track.track);
-
-    const validTracks = tracks.filter(track => track.has_lyrics);
-    if (validTracks.length === 0) {
+    const track = await tracks.getRandomTrackByArtist(artist);
+    if (!track) {
       res.send(404);
       return;
     }
 
-    const randomTrackIndex = Math.floor(Math.random() * validTracks.length);
-    const track = validTracks[randomTrackIndex];
+    const trackId = track.track_id;
+    const textLyrics = await lyrics.getLyricsByTrackId(trackId);
 
-    const lyricsResponse = await api.lyricsGet({ trackId: track.track_id });
-    const lyrics = lyricsResponse.data.message.body.lyrics.lyrics_body;
-
-    res.send({
-      name: track.track_name,
+    const info = {
+      title: track.track_name,
       artist: track.artist_name,
-      lyrics: lyrics.replace('******* This Lyrics is NOT for Commercial use *******', ''),
-    });
+      album: track.album_name,
+      link: track.track_share_url,
+      lyrics: textLyrics.replace(
+        '******* This Lyrics is NOT for Commercial use *******',
+        '',
+      ),
+    };
+
+    if (process.env.NODE_ENV === 'production') {
+      await slackMessage.sendSlackMessage({ trackInfo: info, response_url });
+      res.send(201);
+      return;
+    }
+
+    res.send(info);
+    res.send(200);
   } catch (e) {
     console.log(e);
     res.status(500);
