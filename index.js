@@ -20,7 +20,8 @@ app.post('/artist', async (req, res) => {
 
     const track = await tracks.getRandomTrackByArtist(artist);
     if (!track) {
-      res.status(404);
+      // cannot use 404, slack would only display an error message
+      res.status(200);
       res.send("🤷🏻‍♂️ that artist doesn't exists.");
       return;
     }
