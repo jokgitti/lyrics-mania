@@ -24,6 +24,12 @@ app.post('/random_lyrics/', async (req, res) => {
       return;
     }
 
+    if (process.env.NODE_ENV === 'production') {
+      // slack POST ack msg
+      // https://api.slack.com/interactivity/handling#acknowledgment_response
+      res.send(200);
+    }
+
     const trackId = track.track_id;
     const textLyrics = await lyrics.getLyricsByTrackId(trackId);
 

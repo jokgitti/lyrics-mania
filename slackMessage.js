@@ -1,6 +1,7 @@
 const axios = require('axios');
 
 const getSlackMessage = ({ lyrics, artist, title, album, link }) => ({
+  response_type: 'in_channel',
   blocks: [
     {
       type: 'divider',
@@ -9,7 +10,7 @@ const getSlackMessage = ({ lyrics, artist, title, album, link }) => ({
       type: 'section',
       text: {
         type: 'mrkdwn',
-        text: `*<${link}|${title}>*\n${artist} ${album}\n\n${lyrics}`,
+        text: `🎤 *<${link}|${title}>*\n*${artist}*, ${album}\n\n${lyrics}`,
       },
     },
     {
