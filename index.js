@@ -1,6 +1,6 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const slackMessage = require('./slackMessage');
+const slack = require('./slack');
 const tracks = require('./tracks');
 const lyrics = require('./lyrics');
 
@@ -10,7 +10,7 @@ const port = process.env.PORT || 3000;
 app.use(bodyParser.json()); // support json encoded bodies
 app.use(bodyParser.urlencoded({ extended: true }));
 
-app.post('/random_lyrics/', async (req, res) => {
+app.post('/doctor_lyrics/', async (req, res) => {
   try {
     const { text: artist, response_url } = req.body;
     if (!artist) {
@@ -40,14 +40,11 @@ app.post('/random_lyrics/', async (req, res) => {
       artist: track.artist_name,
       album: track.album_name,
       link: track.track_share_url,
-      lyrics: textLyrics.replace(
-        '******* This Lyrics is NOT for Commercial use *******',
-        '',
-      ),
+      lyrics: textLyrics,
     };
 
     if (process.env.NODE_ENV === 'production') {
-      await slackMessage.sendSlackMessage({ trackInfo: info, response_url });
+      await slack.sendSlackMessage({ trackInfo: info, response_url });
       res.send(201);
       return;
     }
