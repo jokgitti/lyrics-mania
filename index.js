@@ -38,9 +38,10 @@ app.post('/random_lyrics/', async (req, res) => {
       artist: track.artist_name,
       album: track.album_name,
       link: track.track_share_url,
-      lyrics: textLyrics
-        .replace('******* This Lyrics is NOT for Commercial use *******', '')
-        .replace('\n', '\n>'),
+      lyrics: textLyrics.replace(
+        '******* This Lyrics is NOT for Commercial use *******',
+        '',
+      ),
     };
 
     if (process.env.NODE_ENV === 'production') {
