@@ -20,14 +20,16 @@ app.post('/random_lyrics/', async (req, res) => {
 
     const track = await tracks.getRandomTrackByArtist(artist);
     if (!track) {
-      res.send(404);
+      res.status(404);
+      res.send("🤷🏻‍♂️ that artist doesn't exists.");
       return;
     }
 
     if (process.env.NODE_ENV === 'production') {
       // slack POST ack msg
       // https://api.slack.com/interactivity/handling#acknowledgment_response
-      res.send(200);
+      res.status(200);
+      res.send('🎧 picking lyrics...');
     }
 
     const trackId = track.track_id;
@@ -54,7 +56,8 @@ app.post('/random_lyrics/', async (req, res) => {
     res.send(info);
   } catch (e) {
     console.log(e);
-    res.send(500);
+    res.status(500);
+    res.send('🚨 something went wrong!');
   }
 });
 
